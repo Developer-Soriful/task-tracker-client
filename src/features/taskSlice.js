@@ -3,12 +3,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchTasks = createAsyncThunk("task/fetchTasks", async () => {
-  const res = await axios.get("http://localhost:5000/tasks");
+  const res = await axios.get("https://server-task-manager-tlfh.onrender.com/tasks");
   return res.data;
 });
 
 export const addNewTask = createAsyncThunk("task/addNewTask", async (task) => {
-  const res = await axios.post("http://localhost:5000/tasks", task);
+  const res = await axios.post("https://server-task-manager-tlfh.onrender.com/tasks", task);
   return res.data;
 });
 

@@ -16,7 +16,7 @@ const TaskItem = ({ task, refetch }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${_id}`);
+      await axios.delete(`https://server-task-manager-tlfh.onrender.com/tasks/${_id}`);
       toast.success("Task deleted successfully!");
       refetch(); // refresh task list
     } catch (err) {
@@ -31,7 +31,7 @@ const TaskItem = ({ task, refetch }) => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/tasks/${_id}`, formData);
+      await axios.put(`https://server-task-manager-tlfh.onrender.com/tasks/${_id}`, formData);
       toast.success("Task updated successfully!");
       setIsOpen(false);
       refetch();
