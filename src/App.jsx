@@ -1,20 +1,17 @@
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
-import { setUser } from "./features/authSlice";
 import { useEffect } from "react";
+import { loadUserFromStorage } from "./features/authSlice";
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    // Page refresh hole localStorage theke user reload kore store e set korbe
+    dispatch(loadUserFromStorage());
+  }, [dispatch]);
 
-    if (token && user) {
-      dispatch(setUser(JSON.parse(user)));
-    }
-  }, []);
   return (
     <div>
       <ToastContainer />
