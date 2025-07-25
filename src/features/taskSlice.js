@@ -4,8 +4,11 @@ import axios from "axios";
 
 export const fetchTasks = createAsyncThunk("task/fetchTasks", async () => {
   const res = await axios.get("https://server-task-manager-tlfh.onrender.com/tasks");
+
   return res.data;
 });
+
+
 
 export const addNewTask = createAsyncThunk("task/addNewTask", async (task) => {
   const res = await axios.post("https://server-task-manager-tlfh.onrender.com/tasks", task);
@@ -13,7 +16,7 @@ export const addNewTask = createAsyncThunk("task/addNewTask", async (task) => {
 });
 
 const taskSlice = createSlice({
-  name: "task",
+  name: "tasks",
   initialState: {
     tasks: [],
     loading: false,

@@ -4,6 +4,6 @@ import authReducer from "../features/authSlice";
 export const store = configureStore({
     reducer: {
         tasks: taskReducer,
-         auth: authReducer,
+        auth: authReducer,
     },
 });

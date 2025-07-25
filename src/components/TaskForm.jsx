@@ -1,71 +1,96 @@
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+// src/components/AddTaskForm.jsx
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addNewTask } from "../features/taskSlice"; 
+import { addNewTask, fetchTasks } from "../features/taskSlice";
+import { toast } from "react-toastify";
 
-const TaskForm = () => {
+const AddTaskForm = () => {
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    status: "Pending",
+    priority: "Medium",
+  });
 
-  const onSubmit = async (data) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await dispatch(addNewTask(data));
+      await dispatch(addNewTask(formData));
+      await dispatch(fetchTasks()); // ✅ re-fetch tasks to ensure sync
       toast.success("Task added successfully!");
-      reset();
-    } catch (error) {
-      toast.error("Failed to add task!");
-      console.error(error);
+      setFormData({
+        title: "",
+        description: "",
+        dueDate: "",
+        status: "Pending",
+        priority: "Medium",
+      });
+    } catch (err) {
+      toast.error("Failed to add task");
+      console.error(err);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow p-4 rounded mb-6 grid gap-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-3 p-4 border rounded-md">
       <input
-        {...register("title", { required: true })}
-        className="border p-2"
-        placeholder="Task Title"
+        type="text"
+        name="title"
+        value={formData.title}
+        onChange={handleChange}
+        placeholder="Title"
+        className="w-full border px-3 py-2 rounded"
+        required
       />
-      {errors.title && <span className="text-red-500">Title is required</span>}
-
       <textarea
-        {...register("description")}
-        className="border p-2"
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
         placeholder="Description"
+        className="w-full border px-3 py-2 rounded"
       />
-
       <input
         type="date"
-        {...register("dueDate", { required: true })}
-        className="border p-2"
+        name="dueDate"
+        value={formData.dueDate}
+        onChange={handleChange}
+        className="w-full border px-3 py-2 rounded"
+        required
       />
-      {errors.dueDate && (
-        <span className="text-red-500">Due Date is required</span>
-      )}
-
-      <select {...register("status")} className="border p-2">
+      <select
+        name="status"
+        value={formData.status}
+        onChange={handleChange}
+        className="w-full border px-3 py-2 rounded"
+      >
         <option>Pending</option>
+        <option>In Progress</option>
         <option>Completed</option>
       </select>
-
-      <select {...register("priority")} className="border p-2">
+      <select
+        name="priority"
+        value={formData.priority}
+        onChange={handleChange}
+        className="w-full border px-3 py-2 rounded"
+      >
         <option>Low</option>
         <option>Medium</option>
         <option>High</option>
       </select>
-
-      <button type="submit" className="bg-green-600 text-white py-2 rounded">
+      <button
+        type="submit"
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+      >
         Add Task
       </button>
     </form>
   );
 };
 
-export default TaskForm;
+export default AddTaskForm;
